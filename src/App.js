@@ -1,8 +1,13 @@
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Route, Switch } from "react-router";
-import { BrowserRouter } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  useHistory,
+  matchPath,
+  useLocation,
+} from "react-router";
 import Cars from "./components/cars/Cars";
 import Header from "./components/header/Header";
 import PrivateRoute from "./components/helper/PrivateRoute";
@@ -16,8 +21,22 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@material-ui/styles";
 import { createTheme } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
+import { isLoggedIn } from "./services/AuthService";
 
 function App() {
+  const history = useHistory();
+  const location = useLocation();
+
+  console.log(matchPath(location.pathname, { path: "/", exact: true }));
+  if (matchPath(location.pathname, { path: "/", exact: true })) {
+    const isLoggedIn_ = isLoggedIn();
+    if (isLoggedIn_) {
+      history.push("/cars");
+    } else {
+      history.push("/login");
+    }
+  }
+
   return (
     <div className="App" style={{ height: "100%" }}>
       <ThemeProvider theme={createTheme()}>
@@ -32,19 +51,14 @@ function App() {
             style={{ backgroundColor: "white", height: "100%" }}
           >
             <ToastContainer position="top-center" theme="colored" />
-            <BrowserRouter>
-              <Header></Header>
-              <Switch>
-                <Route exact path="/">
-                  <div>home</div>
-                </Route>
-                <Route path="/register" component={Register}></Route>
-                <Route path="/login" component={Login}></Route>
+            <Header></Header>
+            <Switch>
+              <Route path="/register" component={Register}></Route>
+              <Route path="/login" component={Login}></Route>
 
-                <PrivateRoute path="/cars" component={Cars} />
-                <PrivateRoute path="/sell-trade" component={SellTrade} />
-              </Switch>
-            </BrowserRouter>
+              <PrivateRoute path="/cars" component={Cars} />
+              <PrivateRoute path="/sell-trade" component={SellTrade} />
+            </Switch>
           </Grid>
         </Grid>
       </ThemeProvider>

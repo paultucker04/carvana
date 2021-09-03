@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
+import { register } from "./../../services/AuthService";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -30,27 +31,18 @@ export default function Register() {
 
   function sendRegister() {
     const body = {
-      user: {
-        name,
-        email,
-        password,
-        confirmPassword,
-      },
+      name,
+      email,
+      password,
+      password_confirmation: confirmPassword,
     };
 
-    console.log("sending");
-    fetch("http://localhost:8000/api/register", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
+    register(body)
       .then((data) => {
-        console.log(data);
         history.push("/login");
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }
 
