@@ -1,3 +1,7 @@
+This is an app that is a carvana clone. It was meant to teach me fundamentals of react. In this project, react with functional components, react router, material ui component library, fetch http library, and redux for state management.
+
+The main functionality is the ability to login/register. On the /cars page you can create cars and view them. They are stored in the redux store. The only page that has functionality is the /cars page
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
